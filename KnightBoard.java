@@ -20,9 +20,14 @@ public class KnightBoard{
     for (int r = 0 ; r < board.length ; r++){
       for (int c = 0 ; c < board[r].length ; c++){
         if (board[r][c] == 0)
-          boardString += "_ ";
+          boardString += "  _";
         else
-          boardString += board[r][c] + " ";
+          if (board[r][c] > 9){
+            boardString += " " + board[r][c];
+          }
+          else{
+            boardString += "  " + board[r][c];
+          }
       }
       boardString += "\n";
     }
@@ -36,11 +41,21 @@ public class KnightBoard{
   }
 
   private boolean solve(int startingRows, int startingCols, int level){
-    if (level == startingRows * startingCols){
+    if (level == board.length * board[0].length){
+      board[startingRows][startingCols] = level;
       return true;
     }
-    for (int d = 1 ; d < 9 ; d++){
-      System.out.println(canmove(startingRows, startingCols, d));
+    if (level < board.length * board[0].length){
+      for (int d = 1 ; d < 9 ; d++){
+        if (canmove(startingRows, startingCols, d)){
+          board[startingRows][startingCols] = level;
+          int[] where = moveDist(d);
+          if (solve(startingRows+where[0],startingCols+where[1],level+1)){
+            return true;
+          }
+          board[startingRows][startingCols] = 0;
+        }
+      }
     }
     return false;
   }
@@ -51,54 +66,90 @@ public class KnightBoard{
     //up
     if (direction == 1){
       if (row - 2 >= 0 && col - 1 >= 0){
-        return true;
+        return board[row-2][col-1] == 0;
       }
     }
     if (direction == 2){
       if (row - 2 >= 0 && col + 1 < board[row].length){
-        return true;
+        return board[row-2][col+1] == 0;
       }
     }
 
     //right
     if (direction == 3){
       if (row - 1 >= 0 && col + 2 < board[row].length){
-        return true;
+        return board[row-1][col+2] == 0;
       }
     }
     if (direction == 4){
       if (row + 1 < board.length && col + 2 < board[row].length){
-        return true;
+        return board[row+1][col+2] == 0;
       }
     }
 
     //down
     if (direction == 5){
       if (row + 2 < board.length && col + 1 < board[row].length){
-        return true;
+        return board[row+2][col+1] == 0;
       }
     }
     if (direction == 6){
       if (row + 2 < board.length && col - 1 >= 0){
-        return true;
+        return board[row+2][col-1] == 0;
       }
     }
 
     //left
     if (direction == 7){
-      if (row - 1 >= 0 && col - 2 >= 0){
-        return true;
+      if (row + 1 < board.length && col - 2 >= 0){
+        return board[row+1][col-2] == 0;
       }
     }
     if (direction == 8){
       if (row - 1 >= 0 && col - 2 >= 0){
-        return true;
+        return board[row-1][col-2] == 0;
       }
     }
 
     return false;
   }
 
+  private int[] moveDist(int direction){
+    int[] ans = new int[2];
+    if (direction == 1){
+      ans[0] = -2;
+      ans[1] = -1;
+    }
+    if (direction == 2){
+      ans[0] = -2;
+      ans[1] = 1;
+    }
+    if (direction == 3){
+      ans[0] = -1;
+      ans[1] = 2;
+    }
+    if (direction == 4){
+      ans[0] = 1;
+      ans[1] = 2;
+    }
+    if (direction == 5){
+      ans[0] = 2;
+      ans[1] = 1;
+    }
+    if (direction == 6){
+      ans[0] = 2;
+      ans[1] = -1;
+    }
+    if (direction == 7){
+      ans[0] = 1;
+      ans[1] = -2;
+    }
+    if (direction == 8){
+      ans[0] = -1;
+      ans[1] = -2;
+    }
+    return ans;
+  }
   private void isEmpty(){
     for (int r = 0 ; r < board.length ; r++){
       for (int c = 0 ; c < board[r].length ; c++){
