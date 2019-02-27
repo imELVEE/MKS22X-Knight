@@ -1,5 +1,6 @@
 public class KnightBoard{
   private int[][] board;
+  private int count = 0;
 
   public KnightBoard(int startingRows, int startingCols){
     isNegative(startingRows,startingCols);
@@ -45,18 +46,48 @@ public class KnightBoard{
       board[startingRows][startingCols] = level;
       return true;
     }
-    if (level < board.length * board[0].length){
+      board[startingRows][startingCols] = level;
       for (int d = 1 ; d < 9 ; d++){
         if (canmove(startingRows, startingCols, d)){
-          board[startingRows][startingCols] = level;
           int[] where = moveDist(d);
           if (solve(startingRows+where[0],startingCols+where[1],level+1)){
             return true;
           }
-          board[startingRows][startingCols] = 0;
         }
       }
+      board[startingRows][startingCols] = 0;
+    return false;
+  }
+
+  public int countSolutions(int startingRow, int startingCol){
+    isNegative(startingRow,startingCol);
+    isEmpty();
+    count = 0;
+    for (int d = 1 ; d < 9 ; d++){
+      if (multiSolve(startingRow,startingCol,1,d)){
+        clear();
+      }
     }
+    return count;
+  }
+
+  private boolean multiSolve(int startingRows, int startingCols, int level, int dir){
+    if (level == board.length * board[0].length){
+      board[startingRows][startingCols] = level;
+      count++;
+      return true;
+    }
+      board[startingRows][startingCols] = level;
+      for (int d = dir ; d < 9 ; d++){
+        if (canmove(startingRows, startingCols, d)){
+          int[] where = moveDist(d);
+          if (multiSolve(startingRows+where[0],startingCols+where[1],level+1,1)){
+            count++;
+            return true;
+          }
+        }
+      }
+      board[startingRows][startingCols] = 0;
     return false;
   }
 
@@ -150,6 +181,7 @@ public class KnightBoard{
     }
     return ans;
   }
+
   private void isEmpty(){
     for (int r = 0 ; r < board.length ; r++){
       for (int c = 0 ; c < board[r].length ; c++){
