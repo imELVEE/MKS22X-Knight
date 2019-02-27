@@ -47,6 +47,10 @@ public class mydriver{
     System.out.println(test.solve(0,0));
     System.out.println(test);
     System.out.println();
+    test = new KnightBoard(0,0);
+    System.out.println(test.solve(0,0));
+    System.out.println(test);
+    System.out.println();
     test = new KnightBoard(5,5);
     System.out.println(test.countSolutions(0,0));
     System.out.println(test);
@@ -63,6 +67,12 @@ public class mydriver{
     for (int i = 0 ; i < 5 ; i++){
       runTest(i);
     }
+/*
+    test = new KnightBoard(7,7);
+    System.out.println(test.solve(0,0));
+    System.out.println(test);
+    System.out.println();
+    */
   }
 
   //testcase must be a valid index of your input/output array

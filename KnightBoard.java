@@ -38,10 +38,56 @@ public class KnightBoard{
   public boolean solve(int startingRows, int startingCols){
     isNegative(startingRows,startingCols);
     isEmpty();
-    return solve(startingRows,startingCols,1);
+    return optimizedSolve(startingRows,startingCols,1);
+  }
+
+  private boolean optimizedSolve(int startingRows, int startingCols, int level){
+    if (board.length < 3 || board.length == 4 || (board.length == 3 && (board[0].length == 4 || board[0].length == 6 || board[0].length == 8))){
+      return false;
+    }
+    if (level == board.length * board[0].length){
+      board[startingRows][startingCols] = level;
+      return true;
+    }
+    board[startingRows][startingCols] = level;
+    int[] where = moveDist(smallestDir(startingRows,startingCols));
+    if (solve(startingRows+where[0],startingCols+where[1],level+1)){
+      return true;
+    }
+    board[startingRows][startingCols] = 0;
+    return false;
+  }
+
+  private int smallestDir(int r, int c){
+    int ansD = 1;
+    int ansMoveNum = 9;
+    int moveNum;
+    for (int d = 1 ; d < 9 ; d++){
+      if (canmove(r,c,d)){
+
+        moveNum = 0;
+        int[] where = moveDist(d);
+        for (int d2 = 1 ; d2 < 9 ; d2++){
+          if (canmove(r+where[0],c+where[1],d2)){
+            moveNum++;
+          }
+        }
+
+        if (ansMoveNum > moveNum){
+          ansD = d;
+          ansMoveNum = moveNum;
+        }
+
+      }
+    }
+
+    return ansD;
   }
 
   private boolean solve(int startingRows, int startingCols, int level){
+    if (board.length < 3 || board.length == 4 || (board.length == 3 && (board[0].length == 4 || board[0].length == 6 || board[0].length == 8))){
+      return false;
+    }
     if (level == board.length * board[0].length){
       board[startingRows][startingCols] = level;
       return true;
