@@ -51,6 +51,10 @@ public class mydriver{
     System.out.println(test.countSolutions(0,0));
     System.out.println(test);
     System.out.println();
+    test = new KnightBoard(5,4);
+    System.out.println(test.solve(0,0));
+    System.out.println(test);
+    System.out.println();
 
     System.out.println();
     System.out.println();

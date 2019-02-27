@@ -46,16 +46,16 @@ public class KnightBoard{
       board[startingRows][startingCols] = level;
       return true;
     }
-      board[startingRows][startingCols] = level;
-      for (int d = 1 ; d < 9 ; d++){
-        if (canmove(startingRows, startingCols, d)){
-          int[] where = moveDist(d);
-          if (solve(startingRows+where[0],startingCols+where[1],level+1)){
-            return true;
-          }
+    board[startingRows][startingCols] = level;
+    for (int d = 1 ; d < 9 ; d++){
+      if (canmove(startingRows, startingCols, d)){
+        int[] where = moveDist(d);
+        if (solve(startingRows+where[0],startingCols+where[1],level+1)){
+          return true;
         }
       }
-      board[startingRows][startingCols] = 0;
+    }
+    board[startingRows][startingCols] = 0;
     return false;
   }
 
@@ -63,31 +63,26 @@ public class KnightBoard{
     isNegative(startingRow,startingCol);
     isEmpty();
     count = 0;
-    for (int d = 1 ; d < 9 ; d++){
-      if (multiSolve(startingRow,startingCol,1,d)){
+      if (multiSolve(startingRow,startingCol,1)){
         clear();
       }
-    }
     return count;
   }
 
-  private boolean multiSolve(int startingRows, int startingCols, int level, int dir){
+  private boolean multiSolve(int startingRows, int startingCols, int level){
     if (level == board.length * board[0].length){
-      board[startingRows][startingCols] = level;
-      count++;
       return true;
     }
-      board[startingRows][startingCols] = level;
-      for (int d = dir ; d < 9 ; d++){
-        if (canmove(startingRows, startingCols, d)){
-          int[] where = moveDist(d);
-          if (multiSolve(startingRows+where[0],startingCols+where[1],level+1,1)){
-            count++;
-            return true;
-          }
+    board[startingRows][startingCols] = level;
+    for (int d = 1 ; d < 9 ; d++){
+      if (canmove(startingRows, startingCols, d)){
+        int[] where = moveDist(d);
+        if (multiSolve(startingRows+where[0],startingCols+where[1],level+1)){
+          count++;
         }
       }
-      board[startingRows][startingCols] = 0;
+    }
+    board[startingRows][startingCols] = 0;
     return false;
   }
 
